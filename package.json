@@ -1,8 +1,8 @@
 {
   "name": "wechamp-batch-graphql",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Query Batching in Wechat Mini Program",
-  "main": "dist/index.js",
+  "main": "dist/batch-graphql.js",
   "scripts": {
     "build": "node build/build.js"
   },
