@@ -6,7 +6,7 @@
 
 ## Examples
 ```javascript
-import { BatchGraphql, gql } from '@/utils/batch-graphql'
+import { BatchGraphql, gql } from 'wechamp-batch-graphql'
 const graphql = new BatchGraphql({
   uri: '/graphqls'
 })
