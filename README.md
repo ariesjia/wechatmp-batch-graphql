@@ -6,7 +6,7 @@
 
 ## Examples
 ```javascript
-import { BatchGraphql, gql } from 'wechamp-batch-graphql'
+import { BatchGraphql, gql } from 'wechatmp-batch-graphql'
 const graphql = new BatchGraphql({
   uri: '/graphqls'
 })
@@ -39,9 +39,9 @@ graphql.request(query2())
 ## Install
 ``` bash
 // use yarn
-yarn add wechamp-batch-graphql
+yarn add wechatmp-batch-graphql
 // use npm
-npm install wechamp-batch-graphql
+npm install wechatmp-batch-graphql
 ```
 
 ## License

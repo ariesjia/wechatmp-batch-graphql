@@ -1,5 +1,5 @@
 {
-  "name": "wechamp-batch-graphql",
+  "name": "wechatmp-batch-graphql",
   "version": "0.0.2",
   "description": "Query Batching in Wechat Mini Program",
   "main": "dist/batch-graphql.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ariesjia/wechamp-batch-graphql.git"
+    "url": "git+https://github.com/ariesjia/wechatmp-batch-graphql.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ariesjia/wechamp-batch-graphql/issues"
+    "url": "https://github.com/ariesjia/wechatmp-batch-graphql/issues"
   },
-  "homepage": "https://github.com/ariesjia/wechamp-batch-graphql#readme",
+  "homepage": "https://github.com/ariesjia/wechatmp-batch-graphql#readme",
   "devDependencies": {
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
