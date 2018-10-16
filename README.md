@@ -50,4 +50,4 @@ npm install wechamp-batch-graphql
 
 
 ## Thanks
-Heavily inspired by nanographql
+Heavily inspired by [nanographql](https://github.com/yoshuawuyts/nanographql)
