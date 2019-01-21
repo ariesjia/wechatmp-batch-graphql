@@ -1,4 +1,4 @@
-import Deferred from './deferred'
+import Deferred from './utils/deferred'
 
 export const request = method => (url, option) => {
   const {

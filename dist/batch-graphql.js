@@ -80,6 +80,31 @@ var Deferred = function Deferred() {
   this.promise = promise;
 };
 
+var isEmpty = function isEmpty(obj) {
+  // null and undefined are "empty"
+  if (obj === null || obj === undefined) { return true; } // Assume if it has a length property with a non-zero value
+  // that that property is correct.
+
+  if (obj.length > 0) { return false; }
+  if (obj.length === 0) { return true; } // If it isn't an object at this point
+  // it is empty, but it can't be anything *but* empty
+  // Is it empty?  Depends on your application.
+
+  if (_typeof(obj) !== "object") { return true; } // Otherwise, does it have any properties of its own?
+  // Note that this doesn't handle
+  // toString and valueOf enumeration bugs in IE < 9
+
+  return Object.keys(obj).length === 0;
+};
+
+function isType(type) {
+  return function (obj) {
+    return {}.toString.call(obj) == "[object " + type + "]";
+  };
+}
+
+var isFunction = isType("Function");
+
 var request = function request(method) {
   return function (url, option) {
     var _Object$assign = Object.assign({
@@ -115,23 +140,6 @@ var request = function request(method) {
   };
 };
 
-var isEmpty = function isEmpty(obj) {
-  // null and undefined are "empty"
-  if (obj === null || obj === undefined) { return true; } // Assume if it has a length property with a non-zero value
-  // that that property is correct.
-
-  if (obj.length > 0) { return false; }
-  if (obj.length === 0) { return true; } // If it isn't an object at this point
-  // it is empty, but it can't be anything *but* empty
-  // Is it empty?  Depends on your application.
-
-  if (_typeof(obj) !== "object") { return true; } // Otherwise, does it have any properties of its own?
-  // Note that this doesn't handle
-  // toString and valueOf enumeration bugs in IE < 9
-
-  return Object.keys(obj).length === 0;
-};
-
 var getOpname = /(query|mutation) ?([\w\d-_]+)? ?\(.*?\)? \{/;
 function nanographql(str) {
   str = Array.isArray(str) ? str.join('') : str;
@@ -158,6 +166,15 @@ var _graph = function graph(url, gql) {
     headers: option.headers
   });
 };
+
+var buildHeaders = function buildHeaders(headers) {
+  if (isFunction(headers)) {
+    return headers();
+  }
+
+  return headers || {};
+};
+
 var BatchGraphql =
 /*#__PURE__*/
 function () {
@@ -165,13 +182,16 @@ function () {
     var _ref$uri = _ref.uri,
         uri = _ref$uri === void 0 ? '/graphql' : _ref$uri,
         _ref$batchInterval = _ref.batchInterval,
-        batchInterval = _ref$batchInterval === void 0 ? 10 : _ref$batchInterval;
+        batchInterval = _ref$batchInterval === void 0 ? 10 : _ref$batchInterval,
+        _ref$option = _ref.option,
+        option = _ref$option === void 0 ? {} : _ref$option;
 
     _classCallCheck(this, BatchGraphql);
 
     this._queuedRequests = [];
     this.uri = uri;
     this.batchInterval = batchInterval;
+    this.baseOption = option;
   }
 
   _createClass(BatchGraphql, [{
@@ -197,7 +217,9 @@ function () {
     key: "graph",
     value: function graph(gql) {
       var option = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      return _graph(option.uri || this.uri, gql, option).then(function (res) {
+      return _graph(option.uri || this.uri, gql, _objectSpread({}, option, {
+        headers: Object.assign({}, buildHeaders(this.baseOption.headers), buildHeaders(option.headers))
+      })).then(function (res) {
         if (!isEmpty(res.data.errors)) {
           return Promise.reject(res);
         }

@@ -10,6 +10,7 @@ import { BatchGraphql, gql } from 'wechatmp-batch-graphql'
 const graphql = new BatchGraphql({
   uri: '/graphqls'
 })
+
 const query1 = gql`
 query getProduct($id: ID!) {
   node(id: $id) {

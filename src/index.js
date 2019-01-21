@@ -1,6 +1,9 @@
-import Deferred from './deferred'
+import Deferred from './utils/deferred'
+import { isEmpty } from './utils/isEmpty'
+import { isFunction } from './utils/is'
 import { request } from './request'
-import { isEmpty } from './isEmpty'
+
+export {default as gql} from './utils/nanographql'
 
 export const graph = (url, gql, option = {}) => {
   return request('POST')(
@@ -12,14 +15,24 @@ export const graph = (url, gql, option = {}) => {
   )
 }
 
+const buildHeaders = (headers) => {
+  if(isFunction(headers)) {
+    return headers()
+  }
+  return headers || {}
+}
+
+
 export class BatchGraphql {
   constructor({
     uri = '/graphql',
     batchInterval = 10,
+    option = {}
   }) {
     this._queuedRequests = []
     this.uri = uri
     this.batchInterval = batchInterval
+    this.baseOption = option
   }
 
   request(gql, option) {
@@ -38,7 +51,14 @@ export class BatchGraphql {
   }
 
   graph(gql, option = {}) {
-    return graph(option.uri || this.uri, gql, option).then((res) => {
+    return graph(option.uri || this.uri, gql, {
+      ...option,
+      headers: Object.assign(
+        {},
+        buildHeaders(this.baseOption.headers),
+        buildHeaders(option.headers),
+      )
+    }).then((res) => {
       if (!isEmpty(res.data.errors)) {
         return Promise.reject(res)
       }
@@ -78,5 +98,3 @@ export class BatchGraphql {
     }, this.batchInterval)
   }
 }
-
-export {default as gql} from './nanographql'
