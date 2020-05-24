@@ -35,19 +35,23 @@ export class BatchGraphql {
     this.baseOption = option
   }
 
-  request(gql, option) {
-    const defer = new Deferred()
-    this._queuedRequests.push({
-      config: {
-        gql,
-        option
-      },
-      defer
-    })
-    if (this._queuedRequests.length === 1) {
-      this._timer()
+  request(gql, option = {}) {
+    if(option.batch === false) {
+      return this.graph(gql, option)
+    } else {
+      const defer = new Deferred()
+      this._queuedRequests.push({
+        config: {
+          gql,
+          option
+        },
+        defer
+      })
+      if (this._queuedRequests.length === 1) {
+        this._timer()
+      }
+      return defer.promise
     }
-    return defer.promise
   }
 
   graph(gql, option = {}) {
